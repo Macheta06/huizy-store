@@ -10,7 +10,7 @@ const PORT = 5000;
 // 4. Crear nuestro primer endpoint de prueba
 // Cuando alguien haga una petición GET a la raíz '/', se ejecutará esta función
 app.get('/', (req, res) => {
-  res.send('¡Hola, mundo! El servidor de Huizy está funcionando.');
+  res.send('¡Huizy server con nodemon!');
 });
 
 // 5. Poner el servidor a "escuchar" en el puerto definido
