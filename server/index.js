@@ -1,19 +1,24 @@
-// Importar Express
+// server/index.js
+
 const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv').config(); 
+
+// Importar rutas
 const productRoutes = require('./routes/products.routes.js');
 
-// Crear una instancia de la aplicación Express
 const app = express();
+const PORT = 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
-// Definir el puerto en el que correrá el servidor
-const PORT = 5000; 
+// Conexión a la base de datos
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('Conectado a MongoDB Atlas'))
+  .catch((error) => console.error('Error al conectar a MongoDB Atlas:', error));
 
-// Usa el router de productos con un prefijo
-// Le decimos a nuestra app que todas las rutas definidas en 'productRoutes'
-// comenzarán con el prefijo '/api/products'
+// Rutas
 app.use('/api/products', productRoutes);
 
-// Poner el servidor a "escuchar" en el puerto definido
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
 });

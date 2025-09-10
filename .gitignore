@@ -1,0 +1,8 @@
+# huizy-store/.gitignore
+
+# Dependencias
+node_modules/
+server/node_modules/
+
+# Archivos de entorno
+server/.env
