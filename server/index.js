@@ -2,7 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config(); 
+require('dotenv').config();
 
 // Importar rutas
 const productRoutes = require('./routes/products.routes.js');
@@ -15,6 +15,9 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado a MongoDB Atlas'))
   .catch((error) => console.error('Error al conectar a MongoDB Atlas:', error));
+
+// Middleware para que Express entienda el body de las peticiones en formato JSON
+app.use(express.json());
 
 // Rutas
 app.use('/api/products', productRoutes);
