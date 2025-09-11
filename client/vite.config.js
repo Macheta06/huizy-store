@@ -11,4 +11,13 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
+  server: {
+    proxy: {
+      // Cualquier petición que empiece con '/api' será redirigida
+      '/api': {
+        target: 'http://localhost:5000', // El servidor del backend
+        changeOrigin: true,
+      },
+    }
+  }
 })
