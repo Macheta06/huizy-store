@@ -1,20 +1,23 @@
 // client/src/context/CartContext.jsx
 
-import React, { useState } from 'react';
-import { CartContext } from '../hooks/useCart';
+import React, { useState } from "react";
+import { CartContext } from "../hooks/useCart";
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (product, presentation) => {
     const existingItem = cart.find(
-      item => item._id === product._id && item.presentation.weight === presentation.weight
+      (item) =>
+        item._id === product._id &&
+        item.presentation.weight === presentation.weight
     );
 
     if (existingItem) {
       setCart(
-        cart.map(item =>
-          item._id === product._id && item.presentation.weight === presentation.weight
+        cart.map((item) =>
+          item._id === product._id &&
+          item.presentation.weight === presentation.weight
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
@@ -24,8 +27,20 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const removeFromCart = (productId, presentationWeight) => {
+      setCart(
+        cart.filter(
+          (item) =>
+            !(
+              item._id === productId &&
+              item.presentation.weight === presentationWeight
+            )
+        )
+      );
+    };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
