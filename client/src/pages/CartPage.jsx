@@ -5,7 +5,8 @@ import { useCart } from "../hooks/useCart";
 import { Link } from "react-router-dom";
 
 function CartPage() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, increaseQuantity, decreaseQuantity } =
+    useCart();
   const subtotal = cart.reduce(
     (sum, item) => sum + item.presentation.price * item.quantity,
     0
@@ -61,9 +62,24 @@ function CartPage() {
                     COP
                   </p>
                 </div>
-                <div className="text-center mx-4">
-                  <p>Cant: {item.quantity}</p>
-                  {/* Aquí podríamos añadir botones para +/- cantidad */}
+                <div className="flex items-center gap-3 mx-4">
+                  <button
+                    onClick={() =>
+                      decreaseQuantity(item._id, item.presentation.weight)
+                    }
+                    className="bg-gray-200 rounded-full w-6 h-6 font-bold flex items-center justify-center"
+                  >
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      increaseQuantity(item._id, item.presentation.weight)
+                    }
+                    className="bg-gray-200 rounded-full w-6 h-6 font-bold flex items-center justify-center"
+                  >
+                    +
+                  </button>
                 </div>
                 <button
                   onClick={() =>
