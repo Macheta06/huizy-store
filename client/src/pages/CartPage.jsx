@@ -115,9 +115,11 @@ function CartPage() {
                 ${new Intl.NumberFormat("es-CO").format(subtotal)} COP
               </span>
             </div>
-            <button className="w-full bg-teal-600 text-white font-bold py-3 mt-6 rounded hover:bg-teal-700 transition-colors">
-              Proceder al Pago
-            </button>
+            <Link to="/checkout" className="block w-full">
+              <button className="w-full bg-teal-600 text-white font-bold py-3 mt-6 rounded hover:bg-teal-700 transition-colors">
+                Proceder al Pago
+              </button>
+            </Link>
           </div>
         </div>
       </div>
