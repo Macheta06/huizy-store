@@ -26,6 +26,9 @@ function Navbar() {
 
           {user ? (
             <>
+              <Link to="/my-orders" className="hover:text-teal-200">
+                Mis Pedidos
+              </Link>
               <span className="font-semibold">Hola, {user.name}</span>
               <button
                 onClick={logout}

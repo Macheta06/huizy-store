@@ -30,4 +30,19 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
+router.get("/myorders", protect, async (req, res) => {
+  try {
+    // Buscamos todas las órdenes donde el campo 'user' coincida con el id del usuario del token
+    const orders = await Order.find({ user: req.user.id }).sort({
+      createdAt: -1,
+    }); // Ordena por fecha de creación descendente
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error en el servidor al obtener las órdenes" });
+  }
+});
+
 module.exports = router;
