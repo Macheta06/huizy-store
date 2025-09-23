@@ -6,6 +6,7 @@ require('dotenv').config();
 
 // Importar rutas
 const productRoutes = require('./routes/products.routes.js');
+const authRoutes = require('./routes/auth.routes.js');
 
 const app = express();
 const PORT = 5000;
@@ -21,6 +22,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
