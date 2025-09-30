@@ -1,6 +1,7 @@
 // client/src/pages/AdminProductListPage.jsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 function AdminProductListPage() {
   const [products, setProducts] = useState([]);
@@ -35,7 +36,12 @@ function AdminProductListPage() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-8">Gestionar Productos</h1>
-      {/* Aquí iría un botón para "Crear Producto" */}
+      <Link
+        to="/admin/product/new"
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Crear Producto
+      </Link>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead>
@@ -66,9 +72,12 @@ function AdminProductListPage() {
                 <td className="py-3 px-6 text-center">{product.category}</td>
                 <td className="py-3 px-6 text-center">
                   <div className="flex item-center justify-center">
-                    <button className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-2">
+                    <Link
+                      to={`/admin/product/${product._id}/edit`}
+                      className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-2"
+                    >
                       ✏️
-                    </button>
+                    </Link>
                     <button
                       onClick={() => deleteHandler(product._id)}
                       className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center"

@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import AdminRoute from "./components/AdminRoute";
 import AdminProductListPage from "./pages/AdminProductListPage";
+import ProductEditPage from "./pages/ProductEditPages";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
       {/* Rutas de Administrador Protegidas */}
       <Route path="/admin" element={<AdminRoute />}>
         <Route path="productlist" element={<AdminProductListPage />} />
+        <Route path="product/:id/edit" element={<ProductEditPage />} />
+        <Route path="product/new" element={<ProductEditPage />} />
       </Route>
     </Routes>
   );
