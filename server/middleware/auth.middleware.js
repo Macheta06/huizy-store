@@ -1,24 +1,18 @@
 // server/middleware/auth.middleware.js
 const jwt = require("jsonwebtoken");
+const User = require("../models/user.model.js");
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
-
-  // Buscamos el token en los headers de la petición
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
-      // Extraemos el token (ej: "Bearer eyJhbGci...")
       token = req.headers.authorization.split(" ")[1];
-
-      // Verificamos el token con nuestra palabra secreta
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Adjuntamos el usuario decodificado a la petición para usarlo después
-      req.user = decoded.user;
-      next(); // Si todo está bien, continuamos a la ruta
+      req.user = await User.findById(decoded.user.id).select("-password");
+      next();
     } catch (error) {
       res
         .status(401)
@@ -31,4 +25,12 @@ const protect = (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401).json({ message: "No autorizado como administrador" });
+  }
+};
+
+module.exports = { protect, admin };

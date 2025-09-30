@@ -1,13 +1,12 @@
 // client/src/context/AuthContext.jsx
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-// 1. Importa el contexto desde el archivo de hooks
 import { AuthContext } from "../hooks/useAuth";
 
-// 2. Este archivo ahora solo exporta el componente
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem("token")); // Lee desde el inicio
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const currentToken = localStorage.getItem("token");
@@ -25,7 +24,11 @@ export const AuthProvider = ({ children }) => {
         // Si el token es inválido o malformado, lo registramos y deslogueamos al usuario.
         console.error("Token inválido encontrado en localStorage:", error);
         logout();
+      } finally {
+        setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -43,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginAction, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, loginAction, logout }}>
       {children}
     </AuthContext.Provider>
   );

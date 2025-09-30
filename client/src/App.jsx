@@ -9,10 +9,13 @@ import CheckoutPage from "./pages/CheckoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
+import AdminRoute from "./components/AdminRoute";
+import AdminProductListPage from "./pages/AdminProductListPage";
 
 function App() {
   return (
     <Routes>
+      {/* Rutas Públicas con Layout */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="product/:id" element={<ProductDetailPage />} />
@@ -21,6 +24,11 @@ function App() {
         <Route path="my-orders" element={<MyOrdersPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
+      </Route>
+
+      {/* Rutas de Administrador Protegidas */}
+      <Route path="/admin" element={<AdminRoute />}>
+        <Route path="productlist" element={<AdminProductListPage />} />
       </Route>
     </Routes>
   );
