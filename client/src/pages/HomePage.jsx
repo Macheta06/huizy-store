@@ -13,7 +13,6 @@ function HomePage() {
   useEffect(() => {
     setLoading(true);
     // Usamos fetch para pedir los datos a nuestro backend
-    // Gracias al proxy, solo necesitamos usar '/api/products'
     fetch(`${import.meta.env.VITE_API_URL}/api/products/`)
       .then((response) => response.json())
       .then((data) => {
@@ -24,7 +23,7 @@ function HomePage() {
         console.error("Error al obtener los productos:", error);
         setLoading(false);
       });
-  }, []); // El array vacío asegura que esto solo se ejecute una vez
+  }, []);
 
   return (
     <div>

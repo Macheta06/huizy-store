@@ -22,7 +22,7 @@ mongoose
 
 app.use(
   cors({
-    origin: "https://huizy-store.vercel.app/",
+    origin: "https://somoshuizy.vercel.app",
   })
 );
 
