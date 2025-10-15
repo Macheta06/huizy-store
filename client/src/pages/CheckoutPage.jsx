@@ -45,14 +45,17 @@ function CheckoutPage() {
     };
 
     try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/orders/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();

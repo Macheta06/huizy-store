@@ -14,7 +14,7 @@ function HomePage() {
     setLoading(true);
     // Usamos fetch para pedir los datos a nuestro backend
     // Gracias al proxy, solo necesitamos usar '/api/products'
-    fetch("/api/products")
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

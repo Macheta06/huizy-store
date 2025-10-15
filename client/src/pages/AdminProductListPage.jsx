@@ -12,7 +12,7 @@ function AdminProductListPage() {
   }, []);
 
   const fetchProducts = async () => {
-    const res = await fetch("/api/products");
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/`);
     const data = await res.json();
     setProducts(data);
   };
@@ -22,7 +22,7 @@ function AdminProductListPage() {
       window.confirm("¿Estás seguro de que quieres eliminar este producto?")
     ) {
       try {
-        await fetch(`/api/products/${id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });

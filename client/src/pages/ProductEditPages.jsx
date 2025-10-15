@@ -24,7 +24,9 @@ function ProductEditPage() {
     if (!isCreating) {
       // Si estamos editando, carga los datos del producto
       const fetchProduct = async () => {
-        const res = await fetch(`/api/products/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/products/${id}`
+        );
         const data = await res.json();
         setProductData({
           ...data,
@@ -67,7 +69,9 @@ function ProductEditPage() {
         .map((item) => item.trim()), // Convierte el string a array
     };
 
-    const url = isCreating ? "/api/products" : `/api/products/${id}`;
+    const url = isCreating
+      ? `${import.meta.env.VITE_API_URL}/api/products/`
+      : `${import.meta.env.VITE_API_URL}/api/products/${id}`;
     const method = isCreating ? "POST" : "PUT";
 
     try {

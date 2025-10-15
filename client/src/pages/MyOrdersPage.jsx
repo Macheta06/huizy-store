@@ -12,12 +12,15 @@ function MyOrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("/api/orders/myorders", {
-          headers: {
-            // Enviamos el token para la autorización
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/orders/myorders`,
+          {
+            headers: {
+              // Enviamos el token para la autorización
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("No se pudieron obtener los pedidos");
         }

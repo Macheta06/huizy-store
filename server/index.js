@@ -2,6 +2,7 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 
 // Importar rutas
@@ -18,6 +19,12 @@ mongoose
   .connect(MONGO_URI)
   .then(() => console.log("Conectado a MongoDB Atlas"))
   .catch((error) => console.error("Error al conectar a MongoDB Atlas:", error));
+
+app.use(
+  cors({
+    origin: "https://huizy-store.vercel.app/",
+  })
+);
 
 // Middleware para que Express entienda el body de las peticiones en formato JSON
 app.use(express.json());
