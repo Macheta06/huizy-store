@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 
 function MyOrdersPage() {
   const [orders, setOrders] = useState([]);

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { CartContext } from "../hooks/useCart";
+import toast from "react-hot-toast";
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
@@ -25,6 +26,9 @@ export const CartProvider = ({ children }) => {
     } else {
       setCart([...cart, { ...product, presentation, quantity: 1 }]);
     }
+    toast.success(
+      `${product.name} (${presentation.weight}) añadido al carrito!`
+    );
   };
 
   const removeFromCart = (productId, presentationWeight) => {
