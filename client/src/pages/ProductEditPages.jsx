@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 function ProductEditPage() {
   const { id } = useParams(); // Obtiene el ID de la URL, si existe
@@ -87,9 +88,13 @@ function ProductEditPage() {
       if (!response.ok) {
         throw new Error("Error al guardar el producto");
       }
+      toast.success(
+        `Producto ${isCreating ? "creado" : "actualizado"} exitosamente!`
+      );
       navigate("/admin/productlist"); // Redirige a la lista de productos
     } catch (error) {
       console.error(error);
+      toast.error("Hubo un error al guardar el producto.");
     }
   };
 

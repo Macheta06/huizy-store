@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function AdminProductListPage() {
   const [products, setProducts] = useState([]);
@@ -26,9 +27,11 @@ function AdminProductListPage() {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
+        toast.success("Producto eliminado exitosamente"); // 2. Notificación de éxito
         fetchProducts(); // Vuelve a cargar la lista de productos
       } catch (error) {
         console.error("Error al eliminar el producto:", error);
+        toast.error("No se pudo eliminar el producto."); // 3. Notificación de error
       }
     }
   };
