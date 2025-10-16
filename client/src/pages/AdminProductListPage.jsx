@@ -38,13 +38,15 @@ function AdminProductListPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-8">Gestionar Productos</h1>
-      <Link
-        to="/admin/product/new"
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-8"
-      >
-        Crear Producto
-      </Link>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Gestionar Productos</h1>
+        <Link
+          to="/admin/product/new"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Crear Producto
+        </Link>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead>
