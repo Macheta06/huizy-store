@@ -100,6 +100,12 @@ function ProductEditPage() {
 
   return (
     <div className="container mx-auto p-8">
+      <Link
+        to="/admin/productlist"
+        className="text-teal-600 hover:text-teal-800 hover:underline mb-4 inline-block"
+      >
+        &larr; Volver a la lista de productos
+      </Link>
       <h1 className="text-3xl font-bold mb-8">
         {isCreating ? "Crear Nuevo Producto" : "Editar Producto"}
       </h1>
