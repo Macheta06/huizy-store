@@ -16,7 +16,7 @@ function ProductEditPage() {
     category: "",
     imageUrl: "",
     ingredients: "", // string separado por comas
-    presentations: [{ weight: "", price: 0, stock: 0 }],
+    presentations: [{ weight: "", price: "", stock: "" }],
   });
 
   const isCreating = !id; // Si no hay ID, estamos creando
@@ -55,7 +55,7 @@ function ProductEditPage() {
       ...prev,
       presentations: [
         ...prev.presentations,
-        { weight: "", price: 0, stock: 0 },
+        { weight: "", price: "", stock: "" },
       ],
     }));
   };

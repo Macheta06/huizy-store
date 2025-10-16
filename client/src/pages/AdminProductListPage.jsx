@@ -41,7 +41,7 @@ function AdminProductListPage() {
       <h1 className="text-3xl font-bold mb-8">Gestionar Productos</h1>
       <Link
         to="/admin/product/new"
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-8"
       >
         Crear Producto
       </Link>
