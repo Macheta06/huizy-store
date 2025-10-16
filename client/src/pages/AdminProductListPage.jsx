@@ -27,11 +27,11 @@ function AdminProductListPage() {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
-        toast.success("Producto eliminado exitosamente"); // 2. Notificación de éxito
+        toast.success("Producto eliminado exitosamente");
         fetchProducts(); // Vuelve a cargar la lista de productos
       } catch (error) {
         console.error("Error al eliminar el producto:", error);
-        toast.error("No se pudo eliminar el producto."); // 3. Notificación de error
+        toast.error("No se pudo eliminar el producto.");
       }
     }
   };
