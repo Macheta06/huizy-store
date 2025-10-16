@@ -13,19 +13,28 @@ function Navbar() {
   return (
     <nav className="bg-teal-700 text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link
-          to="/"
-          className="text-2xl font-bold hover:text-teal-200 transition-colors"
-        >
+        <Link to="/" className="text-2xl font-bold hover:text-teal-200">
           HUIZY
         </Link>
+
+        {/* Enlaces de Navegación */}
         <div className="flex items-center space-x-4">
-          <Link to="/" className="hover:text-teal-200 transition-colors">
+          <Link to="/" className="hover:text-teal-200">
             Inicio
           </Link>
 
           {user ? (
             <>
+              {/* Comprueba si el usuario existe Y si es admin */}
+              {user.isAdmin && (
+                <Link
+                  to="/admin/productlist"
+                  className="font-bold bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-500 transition-colors"
+                >
+                  Panel de Admin
+                </Link>
+              )}
+
               <Link to="/my-orders" className="hover:text-teal-200">
                 Mis Pedidos
               </Link>
@@ -39,6 +48,7 @@ function Navbar() {
             </>
           ) : (
             <>
+              {/* El usuario no está logueado */}
               <Link to="/login" className="hover:text-teal-200">
                 Login
               </Link>
@@ -48,10 +58,9 @@ function Navbar() {
             </>
           )}
 
-          <Link
-            to="/cart"
-            className="relative hover:text-teal-200 transition-colors"
-          >
+          {/* Icono del Carrito (siempre visible) */}
+          <Link to="/cart" className="relative hover:text-teal-200">
+            {/* ... tu SVG del carrito ... */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
