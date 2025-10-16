@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function ProductEditPage() {
