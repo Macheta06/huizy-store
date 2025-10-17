@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useCart } from "../hooks/useCart";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import { formatWhatsAppMessage } from "../utils/formatMessage";
 
 function CheckoutPage() {
   const { cart, clearCart } = useCart();
@@ -28,6 +29,11 @@ function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const total = cart.reduce(
+      (sum, item) => sum + item.presentation.price * item.quantity,
+      0
+    );
+
     const orderData = {
       orderItems: cart.map((item) => ({
         _id: item._id,
@@ -38,35 +44,35 @@ function CheckoutPage() {
         imageUrl: item.imageUrl,
       })),
       shippingInfo: formData,
-      totalPrice: cart.reduce(
-        (sum, item) => sum + item.presentation.price * item.quantity,
-        0
-      ),
+      totalPrice: total,
     };
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/orders/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
+      // --- PASO A (Híbrido): Guardamos la orden en la BD para el historial del cliente ---
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "No se pudo crear la orden");
+        throw new Error("No se pudo guardar la orden");
       }
 
+      // --- PASO B (Nuevo): Generamos y enviamos el mensaje de WhatsApp ---
+
+      const phone = import.meta.env.VITE_WHATSAPP_NUMBER;
+      const message = formatWhatsAppMessage(formData, cart, total);
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+      window.open(whatsappURL, "_blank");
       setOrderPlaced(true);
       clearCart();
     } catch (error) {
-      console.error("Error al crear la orden:", error);
-      // Aquí podrías mostrar un mensaje de error al usuario
+      console.error("Error al finalizar la compra:", error);
     }
   };
 
