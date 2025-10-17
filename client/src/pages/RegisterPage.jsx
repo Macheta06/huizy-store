@@ -1,6 +1,7 @@
 // client/src/pages/RegisterPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -19,14 +20,11 @@ function RegisterPage() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Error al registrar");

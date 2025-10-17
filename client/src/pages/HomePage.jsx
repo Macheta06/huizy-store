@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import { BarLoader } from "react-spinners";
 import Hero from "../components/Hero";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function HomePage() {
   // Estado para guardar la lista de productos
@@ -13,7 +14,7 @@ function HomePage() {
   useEffect(() => {
     setLoading(true);
     // Usamos fetch para pedir los datos a nuestro backend
-    fetch(`${import.meta.env.VITE_API_URL}/api/products/`)
+    fetch(`${API_URL}/api/products/`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

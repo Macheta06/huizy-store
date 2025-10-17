@@ -13,10 +13,14 @@ router.post("/", protect, async (req, res) => {
     }
 
     const order = new Order({
-      user: req.user.id, // Obtenemos el ID del usuario desde el token verificado
+      user: req.user.id,
       orderItems: orderItems.map((item) => ({
-        ...item,
-        product: item._id, // Mapeamos el ID del producto
+        product: item._id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        weight: item.weight,
+        imageUrl: item.imageUrl,
       })),
       shippingInfo,
       totalPrice,

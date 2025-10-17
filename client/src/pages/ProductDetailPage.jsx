@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"; //
 import { useParams } from "react-router-dom";
 import { useCart } from "../hooks/useCart";
 import { BarLoader } from "react-spinners";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ function ProductDetailPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`)
+    fetch(`${API_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);

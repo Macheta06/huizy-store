@@ -5,6 +5,7 @@ import { useCart } from "../hooks/useCart";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { formatWhatsAppMessage } from "../utils/formatMessage";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function CheckoutPage() {
   const { cart, clearCart } = useCart();

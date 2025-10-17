@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function ProductEditPage() {
   const { id } = useParams(); // Obtiene el ID de la URL, si existe
@@ -26,9 +27,7 @@ function ProductEditPage() {
     if (!isCreating) {
       // Si estamos editando, carga los datos del producto
       const fetchProduct = async () => {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/products/${id}`
-        );
+        const res = await fetch(`${API_URL}/api/products/${id}`);
         const data = await res.json();
         setProductData({
           ...data,
