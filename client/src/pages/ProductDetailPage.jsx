@@ -43,7 +43,10 @@ function ProductDetailPage() {
           <div>
             <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
             <p className="text-gray-700 mb-6">{product.description}</p>
-            {/* ... (código de ingredientes) */}
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-2">Ingredientes:</h3>
+              <p className="text-gray-600">{product.ingredients.join(", ")}</p>
+            </div>
 
             <div>
               <h3 className="text-xl font-semibold mb-2">Presentaciones:</h3>
