@@ -65,7 +65,7 @@ function CheckoutPage() {
 
       // --- PASO B (Nuevo): Generamos y enviamos el mensaje de WhatsApp ---
 
-      const phone = import.meta.env.VITE_WHATSAPP_NUMBER;
+      const phone = import.meta.env.VITE_WHATSAPP_NUMBER || "573146042169";
       const message = formatWhatsAppMessage(formData, cart, total);
       const encodedMessage = encodeURIComponent(message);
       const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
