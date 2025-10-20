@@ -26,7 +26,12 @@ function Navbar() {
           <Link to="/" className="hover:text-teal-200">
             Inicio
           </Link>
-
+          <Link to="/shop" className="hover:text-teal-200">
+            Tienda
+          </Link>{" "}
+          <Link to="/conocenos" className="hover:text-teal-200">
+            Conócenos
+          </Link>{" "}
           {user ? (
             <>
               {/* Comprueba si el usuario existe Y si es admin */}
@@ -61,7 +66,6 @@ function Navbar() {
               </Link>
             </>
           )}
-
           {/* Icono del Carrito (siempre visible) */}
           <Link to="/cart" className="relative hover:text-teal-200">
             {/* ... tu SVG del carrito ... */}

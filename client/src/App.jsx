@@ -12,6 +12,10 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import AdminRoute from "./components/AdminRoute";
 import AdminProductListPage from "./pages/AdminProductListPage";
 import ProductEditPage from "./pages/ProductEditPages";
+import ShopPage from "./pages/ShopPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import RecoleccionPage from "./pages/RecoleccionPage";
+import RecoleccionFormPage from "./pages/RecoleccionFormPage";
 
 function App() {
   return (
@@ -25,6 +29,10 @@ function App() {
         <Route path="my-orders" element={<MyOrdersPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="shop" element={<ShopPage />} />
+        <Route path="conocenos" element={<AboutUsPage />} />
+        <Route path="recoleccion" element={<RecoleccionPage />} />
+        <Route path="agendar-recoleccion" element={<RecoleccionFormPage />} />
       </Route>
 
       {/* Rutas de Administrador Protegidas */}
