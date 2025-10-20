@@ -1,12 +1,15 @@
 // client/src/pages/HomePage.jsx
 import React from "react";
-import Hero from "../components/Hero";
+import HeroSlider from "../components/HeroSlider";
+import Testimonials from "../components/Testimonials";
+import Collaborations from "../components/Collaborations";
 
 function HomePage() {
   return (
     <div>
-      <Hero />
-      {/* Aquí pondremos las nuevas secciones de Testimonios y Colaboraciones */}
+      <HeroSlider />
+      <Testimonials />
+      <Collaborations />
     </div>
   );
 }
