@@ -15,7 +15,7 @@ function Navbar() {
       <div className="container mx-auto px-4 md:px-8 py-3 flex justify-between items-center">
         <Link to="/">
           <img
-            src="/images/LogoPNG.png"
+            src="/images/LogoCircular.png"
             alt="Logo de Huizy"
             className="h-10 md:h-14 w-auto"
           />
