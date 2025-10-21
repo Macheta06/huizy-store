@@ -47,28 +47,43 @@ function ProductDetailPage() {
               <h3 className="text-xl font-semibold mb-2">Ingredientes:</h3>
               <p className="text-gray-600">{product.ingredients.join(", ")}</p>
             </div>
-
             <div>
               <h3 className="text-xl font-semibold mb-2">Presentaciones:</h3>
-              {product.presentations.map((p) => (
-                <div
-                  key={p._id}
-                  className="flex justify-between items-center p-3 bg-gray-100 rounded-lg mb-2"
-                >
-                  <div>
-                    <span className="font-semibold">{p.weight}</span>
-                    <span className="block text-gray-600">
-                      ${new Intl.NumberFormat("es-CO").format(p.price)} COP
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => addToCart(product, p)}
-                    className="bg-teal-600 text-white font-bold py-2 px-4 rounded hover:bg-teal-700 transition-colors"
+              {product.presentations.map((p) => {
+                const isPresentationSoldOut = p.stock <= 0;
+
+                return (
+                  <div
+                    key={p._id || p.weight}
+                    className={`flex justify-between items-center p-3 rounded-lg mb-2 ${
+                      isPresentationSoldOut
+                        ? "bg-gray-200 opacity-70"
+                        : "bg-gray-100"
+                    }`}
                   >
-                    Agregar al Carrito
-                  </button>
-                </div>
-              ))}
+                    <div>
+                      <span className="font-semibold">{p.weight}</span>
+                      <span className="block text-gray-600">
+                        ${new Intl.NumberFormat("es-CO").format(p.price)} COP
+                      </span>
+                    </div>
+                    {/* 3. Deshabilitamos el botón condicionalmente */}
+                    <button
+                      onClick={() =>
+                        !isPresentationSoldOut && addToCart(product, p)
+                      }
+                      className={`font-bold py-2 px-4 rounded transition-colors ${
+                        isPresentationSoldOut
+                          ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                          : "bg-teal-600 text-white hover:bg-teal-700"
+                      }`}
+                      disabled={isPresentationSoldOut}
+                    >
+                      {isPresentationSoldOut ? "Agotado" : "Agregar al Carrito"}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

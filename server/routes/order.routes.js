@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/order.model.js");
+const Product = require("../models/product.model.js");
 const { protect } = require("../middleware/auth.middleware.js");
 
 router.post("/", protect, async (req, res) => {
@@ -10,6 +11,34 @@ router.post("/", protect, async (req, res) => {
 
     if (orderItems && orderItems.length === 0) {
       return res.status(400).json({ message: "No hay productos en la orden" });
+    }
+
+    for (const item of orderItems) {
+      const product = await Product.findById(item._id);
+
+      if (product) {
+        const presentation = product.presentations.find(
+          (p) => p.weight === item.weight
+        );
+
+        if (presentation) {
+          if (presentation.stock < item.quantity) {
+            return res.status(400).json({
+              message: `Stock insuficiente para ${product.name} (${presentation.weight}). Disponible: ${presentation.stock}`,
+            });
+          }
+          presentation.stock -= item.quantity;
+        } else {
+          return res.status(400).json({
+            message: `Presentación ${item.weight} no encontrada para ${product.name}`,
+          });
+        }
+        await product.save();
+      } else {
+        return res
+          .status(404)
+          .json({ message: `Producto con ID ${item._id} no encontrado` });
+      }
     }
 
     const order = new Order({
