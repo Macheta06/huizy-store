@@ -16,6 +16,7 @@ import ShopPage from "./pages/ShopPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import RecoleccionPage from "./pages/RecoleccionPage";
 import RecoleccionFormPage from "./pages/RecoleccionFormPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -25,14 +26,16 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="product/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="checkout" element={<CheckoutPage />} />
-        <Route path="my-orders" element={<MyOrdersPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="shop" element={<ShopPage />} />
         <Route path="conocenos" element={<AboutUsPage />} />
         <Route path="recoleccion" element={<RecoleccionPage />} />
         <Route path="agendar-recoleccion" element={<RecoleccionFormPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="my-orders" element={<MyOrdersPage />} />
+        </Route>
       </Route>
 
       {/* Rutas de Administrador Protegidas */}

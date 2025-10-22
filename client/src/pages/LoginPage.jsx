@@ -1,6 +1,6 @@
 // client/src/pages/LoginPage.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -9,6 +9,8 @@ function LoginPage() {
   const [error, setError] = useState("");
   const { loginAction } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,9 +29,8 @@ function LoginPage() {
       if (!response.ok) {
         throw new Error(data.message || "Error al iniciar sesión");
       }
-      // Si el login es exitoso, guarda el token y redirige al inicio
       loginAction(data.token);
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err.message);
     }
