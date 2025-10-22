@@ -11,6 +11,7 @@ function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     fetch(`${API_URL}/api/products/${id}`)
@@ -24,6 +25,17 @@ function ProductDetailPage() {
         setLoading(false);
       });
   }, [id]);
+
+  const handleQuantityChange = (presentationId, value) => {
+    const quantity = parseInt(value, 10);
+    // Asegura que la cantidad sea al menos 1
+    if (quantity >= 1) {
+      setQuantities((prev) => ({
+        ...prev,
+        [presentationId]: quantity,
+      }));
+    }
+  };
 
   return (
     <div className="container mx-auto p-8">
@@ -48,39 +60,66 @@ function ProductDetailPage() {
               <p className="text-gray-600">{product.ingredients.join(", ")}</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-2">Presentaciones:</h3>
+              <h3 className="text-xl font-semibold mb-4">Presentaciones:</h3>{" "}
               {product.presentations.map((p) => {
                 const isPresentationSoldOut = p.stock <= 0;
+                const presentationId = `${product._id}-${p.weight}`;
+                const selectedQuantity = quantities[presentationId] || 1;
 
                 return (
                   <div
-                    key={p._id || p.weight}
-                    className={`flex justify-between items-center p-3 rounded-lg mb-2 ${
+                    key={presentationId}
+                    className={`flex flex-wrap justify-between items-center p-3 rounded-lg mb-4 ${
                       isPresentationSoldOut
                         ? "bg-gray-200 opacity-70"
                         : "bg-gray-100"
                     }`}
                   >
-                    <div>
-                      <span className="font-semibold">{p.weight}</span>
-                      <span className="block text-gray-600">
+                    <div className="mb-2 sm:mb-0">
+                      <span className="font-semibold block sm:inline mr-2">
+                        {p.weight}
+                      </span>
+                      <span className="block sm:inline text-gray-600">
                         ${new Intl.NumberFormat("es-CO").format(p.price)} COP
                       </span>
+                      {!isPresentationSoldOut && (
+                        <span className="text-xs text-gray-500 block sm:inline sm:ml-2">
+                          ({p.stock} disponibles)
+                        </span>
+                      )}
                     </div>
-                    {/* 3. Deshabilitamos el botón condicionalmente */}
-                    <button
-                      onClick={() =>
-                        !isPresentationSoldOut && addToCart(product, p)
-                      }
-                      className={`font-bold py-2 px-4 rounded transition-colors ${
-                        isPresentationSoldOut
-                          ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                          : "bg-teal-600 text-white hover:bg-teal-700"
-                      }`}
-                      disabled={isPresentationSoldOut}
-                    >
-                      {isPresentationSoldOut ? "Agotado" : "Agregar al Carrito"}
-                    </button>
+
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="number"
+                        min="1"
+                        max={p.stock}
+                        value={selectedQuantity}
+                        onChange={(e) =>
+                          handleQuantityChange(presentationId, e.target.value)
+                        }
+                        className={`w-16 px-2 py-1 border rounded ${
+                          isPresentationSoldOut
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : ""
+                        }`}
+                        disabled={isPresentationSoldOut}
+                      />
+                      <button
+                        onClick={() =>
+                          !isPresentationSoldOut &&
+                          addToCart(product, p, selectedQuantity)
+                        }
+                        className={`font-bold py-2 px-4 rounded transition-colors ${
+                          isPresentationSoldOut
+                            ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                            : "bg-teal-600 text-white hover:bg-teal-700"
+                        }`}
+                        disabled={isPresentationSoldOut}
+                      >
+                        {isPresentationSoldOut ? "Agotado" : "Agregar"}
+                      </button>
+                    </div>
                   </div>
                 );
               })}

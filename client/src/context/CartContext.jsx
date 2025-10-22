@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (product, presentation) => {
+  const addToCart = (product, presentation, quantityToAdd = 1) => {
+    // Añade quantityToAdd
     const existingItem = cart.find(
       (item) =>
         item._id === product._id &&
@@ -19,15 +20,15 @@ export const CartProvider = ({ children }) => {
         cart.map((item) =>
           item._id === product._id &&
           item.presentation.weight === presentation.weight
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantityToAdd } // Usa quantityToAdd
             : item
         )
       );
     } else {
-      setCart([...cart, { ...product, presentation, quantity: 1 }]);
+      setCart([...cart, { ...product, presentation, quantity: quantityToAdd }]); // Usa quantityToAdd
     }
     toast.success(
-      `${product.name} (${presentation.weight}) añadido al carrito!`
+      `${product.name} (${presentation.weight}) x ${quantityToAdd} añadido al carrito!`
     );
   };
 
