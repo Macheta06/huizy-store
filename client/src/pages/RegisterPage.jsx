@@ -25,7 +25,11 @@ function RegisterPage() {
       return;
     }
     try {
-      const { confirmPassword, ...dataToSend } = formData;
+      const dataToSend = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      };
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
