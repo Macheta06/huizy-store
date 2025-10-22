@@ -17,6 +17,7 @@ import AboutUsPage from "./pages/AboutUsPage";
 import RecoleccionPage from "./pages/RecoleccionPage";
 import RecoleccionFormPage from "./pages/RecoleccionFormPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminCollectionListPage from "./pages/AdminCollectionListPage";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="productlist" element={<AdminProductListPage />} />
         <Route path="product/:id/edit" element={<ProductEditPage />} />
         <Route path="product/new" element={<ProductEditPage />} />
+        <Route path="collections" element={<AdminCollectionListPage />} />
       </Route>
     </Routes>
   );

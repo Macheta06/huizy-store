@@ -46,14 +46,31 @@ function RecoleccionFormPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Datos de Agendamiento:", formData);
-    setSubmitted(true);
+    const API_URL = import.meta.env.VITE_API_URL || "";
+
+    try {
+      const response = await fetch(`${API_URL}/api/collections`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData), // Envía los datos del formulario
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "No se pudo enviar la solicitud");
+      }
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error al enviar la solicitud:", error);
+      alert(`Error al enviar: ${error.message}`);
+    }
   };
 
   if (submitted) {
-    // ... (mensaje de éxito sin cambios) ...
     return (
       <div className="container mx-auto p-8 text-center">
         <h1 className="text-3xl font-bold text-teal-600 mb-4">

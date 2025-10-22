@@ -3,6 +3,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const collectionRoutes = require("./routes/collection.routes.js");
 require("dotenv").config();
 
 // Importar rutas
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/collections", collectionRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
