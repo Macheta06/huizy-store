@@ -1,6 +1,6 @@
 // client/src/pages/RegisterPage.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL || "";
 
 function RegisterPage() {
@@ -8,6 +8,7 @@ function RegisterPage() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -19,11 +20,16 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    if (formData.password !== formData.confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
     try {
+      const { confirmPassword, ...dataToSend } = formData;
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -32,6 +38,7 @@ function RegisterPage() {
       // Si el registro es exitoso, redirige al login
       navigate("/login");
     } catch (err) {
+      console.error("Error de registro:", err);
       setError(err.message);
     }
   };
@@ -78,12 +85,29 @@ function RegisterPage() {
             required
           />
         </div>
+        <div className="mb-6">
+          <label className="block text-gray-700 font-bold mb-2">
+            Confirmar Contraseña
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
         <button
           type="submit"
           className="w-full bg-teal-600 text-white font-bold py-3 rounded hover:bg-teal-700"
         >
           Registrarse
         </button>
+        <div className="mt-6 text-center text-sm">
+          <Link to="/login" className="text-teal-600 hover:underline">
+            ¿Ya tienes cuenta? Inicia sesión
+          </Link>
+        </div>
       </form>
     </div>
   );

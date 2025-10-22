@@ -20,7 +20,7 @@ function CartPage() {
           Aún no has agregado productos a tu carrito.
         </p>
         <Link
-          to="/"
+          to="/shop"
           className="bg-teal-600 text-white font-bold py-2 px-6 rounded hover:bg-teal-700 transition-colors"
         >
           Ver Productos

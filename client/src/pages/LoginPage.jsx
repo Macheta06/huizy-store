@@ -1,6 +1,6 @@
 // client/src/pages/LoginPage.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -73,6 +73,17 @@ function LoginPage() {
         >
           Entrar
         </button>
+        <div className="mt-6 text-center text-sm">
+          <Link
+            to="/forgot-password"
+            /*Ruta placeholder*/ className="text-teal-600 hover:underline mr-4"
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
+          <Link to="/register" className="text-teal-600 hover:underline">
+            ¿No tienes cuenta? Regístrate
+          </Link>
+        </div>
       </form>
     </div>
   );
