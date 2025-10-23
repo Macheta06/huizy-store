@@ -55,4 +55,31 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
+router.put("/:id/status", protect, admin, async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const { status } = req.body;
+
+    if (status !== "Pendiente" && status !== "Completada") {
+      return res.status(400).json({ message: "Estado no válido" });
+    }
+
+    const request = await CollectionRequest.findById(requestId);
+
+    if (!request) {
+      return res.status(404).json({ message: "Solicitud no encontrada" });
+    }
+
+    request.status = status; // Actualiza el estado
+    const updatedRequest = await request.save(); // Guarda los cambios
+
+    res.json(updatedRequest);
+  } catch (error) {
+    console.error("Error al actualizar estado:", error);
+    res
+      .status(500)
+      .json({ message: "Error en el servidor al actualizar el estado" });
+  }
+});
+
 module.exports = router;
