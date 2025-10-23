@@ -1,5 +1,5 @@
 // client/src/pages/AdminCollectionListPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast"; // Importa toast para feedback
@@ -10,8 +10,8 @@ function AdminCollectionListPage() {
   const { token } = useAuth();
   const API_URL = import.meta.env.VITE_API_URL || ""; // Asegúrate de tener esto
 
-  const fetchRequests = async () => {
-    setLoading(true); // Ponemos loading en true al empezar a cargar
+  const fetchRequests = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/collections`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -23,17 +23,17 @@ function AdminCollectionListPage() {
       setRequests(data);
     } catch (error) {
       console.error(error);
-      toast.error("Error al cargar las solicitudes."); // Notificación de error
+      toast.error("Error al cargar las solicitudes.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, API_URL]);
 
   useEffect(() => {
     if (token) {
       fetchRequests();
     }
-  }, [token]);
+  }, [token, fetchRequests]);
 
   const handleStatusChange = async (requestId, currentStatus) => {
     const newStatus =
