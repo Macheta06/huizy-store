@@ -18,6 +18,7 @@ import RecoleccionPage from "./pages/RecoleccionPage";
 import RecoleccionFormPage from "./pages/RecoleccionFormPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminCollectionListPage from "./pages/AdminCollectionListPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
 
       {/* Rutas de Administrador Protegidas */}
       <Route path="/admin" element={<AdminRoute />}>
+        <Route path="dashboard" element={<AdminDashboardPage />} />
         <Route path="productlist" element={<AdminProductListPage />} />
         <Route path="product/:id/edit" element={<ProductEditPage />} />
         <Route path="product/new" element={<ProductEditPage />} />

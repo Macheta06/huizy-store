@@ -37,7 +37,7 @@ function Navbar() {
               {/* Comprueba si el usuario existe Y si es admin */}
               {user.isAdmin && (
                 <Link
-                  to="/admin/productlist"
+                  to="/admin/dashboard"
                   className="font-bold bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-500 transition-colors"
                 >
                   Panel de Admin
