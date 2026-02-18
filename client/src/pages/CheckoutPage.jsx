@@ -32,7 +32,7 @@ function CheckoutPage() {
 
     const total = cart.reduce(
       (sum, item) => sum + item.presentation.price * item.quantity,
-      0
+      0,
     );
 
     const orderData = {
@@ -50,7 +50,7 @@ function CheckoutPage() {
 
     try {
       // --- PASO A (Híbrido): Guardamos la orden en la BD para el historial del cliente ---
-      const response = await fetch("/api/orders", {
+      const response = await fetch(`${API_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
