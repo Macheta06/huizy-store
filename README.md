@@ -43,7 +43,6 @@ Install dependencies: npm install
 
 Create a .env file in the root of the /server folder:
 
-Fragmento de código
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_super_secret_key
@@ -56,23 +55,11 @@ Install dependencies: npm install
 
 Create a .env file in the root of the /client folder:
 
-Fragmento de código
 VITE_API_URL=http://localhost:5000
 VITE_WHATSAPP_NUMBER=573146042169
 Start the app: npm run dev
 
-📁 Project Structure
-Plaintext
-├── client/              # Frontend (React + Vite)
-│   ├── src/
-│   │   ├── components/  # Reusable UI components
-│   │   ├── context/     # Auth and Cart global state
-│   │   ├── hooks/       # Custom React hooks
-│   │   └── pages/       # View components
-└── server/              # Backend (Node + Express)
-    ├── middleware/      # Auth and security middlewares
-    ├── models/          # Mongoose schemas
-    └── routes/          # API endpoints
+
 👤 Author
 Andrés - Systems Engineer
 
