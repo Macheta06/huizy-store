@@ -1,112 +1,117 @@
-// server/routes/products.routes.js
+import express from "express";
+import mongoose from "mongoose";
+import Product from "../models/product.model.js";
+import { protect, admin } from "../middleware/auth.middleware.js";
 
-const express = require("express");
 const router = express.Router();
-const Product = require("../models/product.model.js");
-const { protect, admin } = require("../middleware/auth.middleware.js");
 
-// GET /api/products/ - Obtener todos los productos
+// Middleware interno para validar ObjectId y evitar errores de casting de MongoDB
+const validateId = (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "ID de producto no válido" });
+  }
+  next();
+};
+
+// @desc    Obtener todos los productos
+// @route   GET /api/products
 router.get("/", async (req, res) => {
   try {
-    // Usa el modelo para buscar todos los productos en la BD
-    const products = await Product.find();
-    res.json(products); // Envía la lista de productos como respuesta
+    const products = await Product.find({});
+    res.json(products);
   } catch (error) {
-    res.status(500).json({
-      message: "Error al obtener los productos",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error al obtener productos" });
   }
 });
 
-// GET /api/products/:id - Obtener un producto específico por su ID
-router.get("/:id", async (req, res) => {
+// @desc    Obtener un producto por ID
+// @route   GET /api/products/:id
+router.get("/:id", validateId, async (req, res) => {
   try {
-    const productId = req.params.id;
-    // Usa el modelo para buscar un producto por su ID
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      // Si no se encuentra el producto, devuelve un error 404
-      return res.status(404).json({ message: "Producto no encontrado" });
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: "Producto no encontrado" });
     }
-
-    res.json(product); // Envía el producto encontrado
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al obtener el producto", error: error.message });
+    res.status(500).json({ message: "Error del servidor" });
   }
 });
 
-// POST /api/products/ - Crear un nuevo producto
+// @desc    Crear un producto
+// @route   POST /api/products
 router.post("/", protect, admin, async (req, res) => {
   try {
-    // req.body contendrá los datos del nuevo producto enviados desde el cliente
-    const newProduct = new Product(req.body);
-    const savedProduct = await newProduct.save(); // Guarda el producto en la BD
+    // Definimos explícitamente qué campos aceptamos (Whitelist)
+    const {
+      name,
+      description,
+      category,
+      imageUrl,
+      ingredients,
+      presentations,
+    } = req.body;
 
-    // Respondemos con un código 201 (Created) y el producto guardado
-    res.status(201).json(savedProduct);
+    const product = new Product({
+      name,
+      description,
+      category,
+      imageUrl,
+      ingredients,
+      presentations,
+    });
+
+    const createdProduct = await product.save();
+    res.status(201).json(createdProduct);
   } catch (error) {
-    // Si hay un error de validación (ej: falta un campo requerido), Mongoose lo reportará
     res
       .status(400)
-      .json({ message: "Error al crear el producto", error: error.message });
+      .json({ message: "Datos de producto inválidos", error: error.message });
   }
 });
 
-// PUT /api/products/:id - Actualizar un producto existente
-router.put("/:id", protect, admin, async (req, res) => {
+// @desc    Actualizar un producto
+// @route   PUT /api/products/:id
+router.put("/:id", protect, admin, validateId, async (req, res) => {
   try {
-    const productId = req.params.id;
-    const updatedData = req.body;
+    const product = await Product.findById(req.params.id);
 
-    // Busca y actualiza el producto por su ID
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
-      updatedData,
-      {
-        new: true, // Esta opción hace que devuelva el documento actualizado
-        runValidators: true, // Para que aplique las validaciones del Schema
-      },
-    );
+    if (product) {
+      // Actualización controlada (Whitelist)
+      product.name = req.body.name || product.name;
+      product.description = req.body.description || product.description;
+      product.category = req.body.category || product.category;
+      product.imageUrl = req.body.imageUrl || product.imageUrl;
+      product.ingredients = req.body.ingredients || product.ingredients;
+      product.presentations = req.body.presentations || product.presentations;
 
-    if (!updatedProduct) {
-      return res
-        .status(404)
-        .json({ message: "Producto no encontrado para actualizar" });
+      const updatedProduct = await product.save();
+      res.json(updatedProduct);
+    } else {
+      res.status(404).json({ message: "Producto no encontrado" });
     }
-
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(400).json({
-      message: "Error al actualizar el producto",
-      error: error.message,
-    });
-  }
-});
-
-// DELETE /api/products/:id - Eliminar un producto
-router.delete("/:id", protect, admin, async (req, res) => {
-  try {
-    const productId = req.params.id;
-
-    const deletedProduct = await Product.findByIdAndDelete(productId);
-
-    if (!deletedProduct) {
-      return res
-        .status(404)
-        .json({ message: "Producto no encontrado para eliminar" });
-    }
-
-    // Respondemos con un mensaje de éxito
-    res.json({ message: "Producto eliminado exitosamente" });
   } catch (error) {
     res
-      .status(500)
-      .json({ message: "Error al eliminar el producto", error: error.message });
+      .status(400)
+      .json({ message: "Error al actualizar producto", error: error.message });
   }
 });
 
-module.exports = router;
+// @desc    Eliminar un producto
+// @route   DELETE /api/products/:id
+router.delete("/:id", protect, admin, validateId, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      await product.deleteOne();
+      res.json({ message: "Producto eliminado" });
+    } else {
+      res.status(404).json({ message: "Producto no encontrado" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar producto" });
+  }
+});
+
+export default router;
