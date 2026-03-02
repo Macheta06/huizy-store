@@ -5,10 +5,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 
-import productRoutes from "./routes/product.routes.js";
+import productRoutes from "./routes/products.routes.js";
 import authRoutes from "./routes/auth.routes.js";
-import orderRoutes from "./routes/order.routes.js";
-import collectionRoutes from "./routes/collection.routes.js";
+import orderRoutes from "./routes/orders.routes.js";
+import collectionRoutes from "./routes/collections.routes.js";
 
 const app = express();
 
