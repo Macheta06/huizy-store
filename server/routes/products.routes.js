@@ -69,7 +69,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       {
         new: true, // Esta opción hace que devuelva el documento actualizado
         runValidators: true, // Para que aplique las validaciones del Schema
-      }
+      },
     );
 
     if (!updatedProduct) {

@@ -21,11 +21,11 @@ const collectionRequestSchema = new mongoose.Schema(
   },
   {
     timestamps: true, // Guarda fecha de creación y actualización
-  }
+  },
 );
 
 const CollectionRequest = mongoose.model(
   "CollectionRequest",
-  collectionRequestSchema
+  collectionRequestSchema,
 );
 module.exports = CollectionRequest;

@@ -1,33 +1,23 @@
 // server/index.js
 
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const collectionRoutes = require("./routes/collection.routes.js");
-require("dotenv").config();
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import "dotenv/config";
 
-// Importar rutas
-const productRoutes = require("./routes/products.routes.js");
-const authRoutes = require("./routes/auth.routes.js");
-const orderRoutes = require("./routes/order.routes.js");
+import productRoutes from "./routes/product.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import orderRoutes from "./routes/order.routes.js";
+import collectionRoutes from "./routes/collection.routes.js";
 
 const app = express();
-const PORT = 5000;
-const MONGO_URI = process.env.MONGO_URI;
 
-// Conexión a la base de datos
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("Conectado a MongoDB Atlas"))
-  .catch((error) => console.error("Error al conectar a MongoDB Atlas:", error));
-
+// Middlewares
 app.use(
   cors({
     origin: "https://somoshuizy.vercel.app",
-  })
+  }),
 );
-
-// Middleware para que Express entienda el body de las peticiones en formato JSON
 app.use(express.json());
 
 // Rutas
@@ -36,6 +26,17 @@ app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/collections", collectionRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
-});
+// Conexión a MongoDB
+const PORT = process.env.PORT || 5000;
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ Conectado a MongoDB Atlas");
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("❌ Error de conexión a MongoDB:", error.message);
+  });
