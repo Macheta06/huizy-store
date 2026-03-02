@@ -1,29 +1,32 @@
-// server/models/order.model.js
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-
-const orderItemSchema = new Schema({
-  product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-  name: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  weight: { type: String, required: true },
-  imageUrl: { type: String, required: true },
-});
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
     user: {
-      type: Schema.Types.ObjectId, // Referencia al usuario que hizo la orden
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
+      index: true, // Optimización para la consulta de "Mis Pedidos"
     },
-    orderItems: [orderItemSchema],
+    orderItems: [
+      {
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        imageUrl: { type: String, required: true },
+        price: { type: Number, required: true },
+        weight: { type: String, required: true },
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Product",
+        },
+      },
+    ],
     shippingInfo: {
       name: { type: String, required: true },
+      email: { type: String, required: true },
       address: { type: String, required: true },
       city: { type: String, required: true },
-      email: { type: String, required: true },
     },
     totalPrice: {
       type: Number,
@@ -36,10 +39,8 @@ const orderSchema = new mongoose.Schema(
       default: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true },
 );
 
 const Order = mongoose.model("Order", orderSchema);
-module.exports = Order;
+export default Order;
