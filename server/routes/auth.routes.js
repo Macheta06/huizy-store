@@ -1,68 +1,62 @@
 // server/routes/auth.routes.js
-
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user.model.js");
+import express from "express";
+import User from "../models/user.model.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-// POST /api/auth/register
+// Función auxiliar para generar JWT (Helper)
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
+
+// @desc    Registro de usuario
+// @route   POST /api/auth/register
 router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    let user = await User.findOne({ email });
-    if (user) {
-      return res
-        .status(400)
-        .json({ message: "El correo electrónico ya está en uso" });
-    }
+  const { name, email, password } = req.body;
 
-    user = new User({ name, email, password });
-    await user.save();
-    res.status(201).json({ message: "Usuario registrado exitosamente" });
+  try {
+    const userExists = await User.findOne({ email });
+    if (userExists)
+      return res.status(400).json({ message: "El usuario ya existe" });
+
+    const user = await User.create({ name, email, password });
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error en el servidor" });
+    res.status(400).json({ message: "Datos inválidos" });
   }
 });
 
-// POST /api/auth/login
+// @desc    Login de usuario
+// @route   POST /api/auth/login
 router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Credenciales inválidas" });
-    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Credenciales inválidas" });
-    }
-
-    const payload = {
-      user: {
-        id: user.id,
+    // Nota: El método matchPassword debe estar definido en tu User Model
+    if (user && (await user.matchPassword(password))) {
+      res.json({
+        _id: user._id,
         name: user.name,
+        email: user.email,
         isAdmin: user.isAdmin,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET, // Necesitaremos una "palabra secreta"
-      { expiresIn: "5h" }, // El token expira en 5 horas
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token }); // Enviamos el token al cliente
-      }
-    );
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(401).json({ message: "Email o contraseña incorrectos" });
+    }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
   }
 });
 
-module.exports = router;
+export default router;
