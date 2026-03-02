@@ -15,7 +15,7 @@ router.post("/", protect, async (req, res) => {
     return res.status(400).json({ message: "No hay productos en la orden" });
   }
 
-  // 1. Iniciamos una Sesión para la Transacción (Atomicidad)
+  // Iniciamos una Sesión para la Transacción (Atomicidad)
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -24,14 +24,14 @@ router.post("/", protect, async (req, res) => {
     const finalOrderItems = [];
 
     for (const item of orderItems) {
-      // 2. Buscamos el producto directamente en la DB dentro de la sesión
+      // Buscamos el producto directamente en la DB dentro de la sesión
       const dbProduct = await Product.findById(item._id).session(session);
 
       if (!dbProduct) {
         throw new Error(`Producto no encontrado: ${item.name}`);
       }
 
-      // 3. Encontramos la presentación exacta
+      // Encontramos la presentación exacta
       const presentation = dbProduct.presentations.find(
         (p) => p.weight === item.weight,
       );
@@ -42,18 +42,18 @@ router.post("/", protect, async (req, res) => {
         );
       }
 
-      // 4. VERIFICACIÓN DE STOCK (Evita Race Condition)
+      // VERIFICACIÓN DE STOCK (Evita Race Condition)
       if (presentation.stock < item.quantity) {
         throw new Error(
           `Stock insuficiente para ${item.name} (${item.weight})`,
         );
       }
 
-      // 5. RECALCULO DE PRECIO EN BACKEND (Seguridad total)
+      // RECALCULO DE PRECIO EN BACKEND
       const itemPrice = presentation.price;
       totalPrice += itemPrice * item.quantity;
 
-      // 6. DESCUENTO DE STOCK ATÓMICO ($inc con valor negativo)
+      // DESCUENTO DE STOCK ATÓMICO ($inc con valor negativo)
       await Product.updateOne(
         { _id: item._id, "presentations.weight": item.weight },
         { $inc: { "presentations.$.stock": -item.quantity } },
@@ -70,7 +70,7 @@ router.post("/", protect, async (req, res) => {
       });
     }
 
-    // 7. CREACIÓN DE LA ORDEN (Solo con campos permitidos - Whitelist)
+    // CREACIÓN DE LA ORDEN (Solo con campos permitidos - Whitelist)
     const order = new Order({
       user: req.user._id,
       orderItems: finalOrderItems,
