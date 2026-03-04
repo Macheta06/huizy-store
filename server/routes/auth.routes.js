@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id),
+      token: generateToken(user),
     });
   } catch (error) {
     res.status(400).json({ message: "Datos inválidos" });
@@ -57,7 +57,7 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: generateToken(user._id),
+        token: generateToken(user),
       });
     } else {
       res.status(401).json({ message: "Email o contraseña incorrectos" });

@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginAction = (newToken) => {
+    setLoading(true);
     localStorage.setItem("token", newToken);
     setToken(newToken);
     const decodedToken = jwtDecode(newToken);
@@ -46,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       name: decodedToken.name,
       isAdmin: decodedToken.isAdmin,
     });
+    setLoading(false);
   };
 
   const logout = () => {
