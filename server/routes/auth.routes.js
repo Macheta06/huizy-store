@@ -6,8 +6,16 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 
 // Función auxiliar para generar JWT (Helper)
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      name: user.name,
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "30d" },
+  );
 };
 
 // @desc    Registro de usuario

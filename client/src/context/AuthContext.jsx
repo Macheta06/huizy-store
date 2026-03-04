@@ -14,15 +14,20 @@ export const AuthProvider = ({ children }) => {
       try {
         const decodedToken = jwtDecode(currentToken);
         const isExpired = decodedToken.exp * 1000 < Date.now();
+
         if (isExpired) {
           logout();
         } else {
-          setUser(decodedToken.user);
+          // CAMBIO AQUÍ: Mapeamos los campos planos del nuevo JWT
+          setUser({
+            id: decodedToken.id,
+            name: decodedToken.name,
+            isAdmin: decodedToken.isAdmin,
+          });
           setToken(currentToken);
         }
       } catch (error) {
-        // Si el token es inválido o malformado, lo registramos y deslogueamos al usuario.
-        console.error("Token inválido encontrado en localStorage:", error);
+        console.error("Token inválido:", error);
         logout();
       } finally {
         setLoading(false);
@@ -36,7 +41,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
     const decodedToken = jwtDecode(newToken);
-    setUser(decodedToken.user);
+    setUser({
+      id: decodedToken.id,
+      name: decodedToken.name,
+      isAdmin: decodedToken.isAdmin,
+    });
   };
 
   const logout = () => {

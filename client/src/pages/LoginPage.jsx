@@ -7,6 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL || "";
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { loginAction } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,6 +34,8 @@ function LoginPage() {
       navigate(from, { replace: true });
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,7 +75,7 @@ function LoginPage() {
           type="submit"
           className="w-full bg-teal-600 text-white font-bold py-3 rounded hover:bg-teal-700"
         >
-          Entrar
+          {isLoading ? "Cargando..." : "Entrar"}
         </button>
         <div className="mt-6 text-center text-sm">
           <Link
