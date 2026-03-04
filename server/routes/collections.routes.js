@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
-import Collection from "../models/collection.model.js";
 import { protect, admin } from "../middleware/auth.middleware.js";
+import Collection from "../models/collectionRequest.model.js";
 
 const router = express.Router();
 
